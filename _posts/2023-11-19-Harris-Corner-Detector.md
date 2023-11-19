@@ -70,7 +70,7 @@ Now that looks pretty good! We can see edges being defined and the corners being
 
 To understand what is happening on a math level, we are observing the eigenvalues of the structure tensor to find the corners as seen below:
 
-$$ \lambda_{min} \approx \frac{\lambda_{1}\lambda_{2}}_{(\lambda_{1} + \lambda_{2})} $$
+$$ \lambda_{min} \approx \frac{\lambda_{1}\lambda_{2}}{(\lambda_{1} + \lambda_{2})} $$
 
 To put it into values that we can understand:
 
