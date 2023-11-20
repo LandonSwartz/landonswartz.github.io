@@ -76,7 +76,7 @@ To put it into values that we can understand:
 
 $$ R = det(M) - k * tr(M)^2 $$
 
-where the R is the corner response in a patch of pixels. The $det(M)$ is the determinant of the structure tensor and $tr(M)$ is the trace of the structure tensor. The $k$ value is empiraclly determined in the original implementation to be between $[0.04, 0.06]$.
+where the R is the corner response in a patch of pixels. The $det(M)$ is the determinant of the structure tensor and $tr(M)$ is the trace of the structure tensor. The $k$ value is empiraclly determined in the original implementation to be between $[0.04, 0.06]$. But in the original paper, this empircally determined value is based on a balance of precision and recall. A higher $k$ value will produce precise corners, where false corner are filtered out better but also some true corners. A lower $k$ will raise the recall that produces more corners overall, including false corners. 
 
 Why do we care about the eigenvalues then? Well we can see from the image below what we mean visually about changing all directions. 
 ![harris_region](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/5b19fbd9-4938-4e23-aeab-827963cc7a23)
@@ -142,3 +142,10 @@ The Harris Corner Detector works great for a lot of situations in computer visio
 ![wall_1](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/2dc55115-d8ed-4de0-8840-10f4403814ec)
 
 In the next blog post, we will implement some simple feature descriptors to see how our little corner detector performs in producing homographies.
+
+### References and Code
+Harris, Christopher G. and M. J. Stephens. “A Combined Corner and Edge Detector.” Alvey Vision Conference (1988).
+ChatGPT-4
+
+Corner Detector is implemented at this repo: 
+
