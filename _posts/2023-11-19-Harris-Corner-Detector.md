@@ -147,5 +147,5 @@ In the next blog post, we will implement some simple feature descriptors to see 
 Harris, Christopher G. and M. J. Stephens. “A Combined Corner and Edge Detector.” Alvey Vision Conference (1988).
 ChatGPT-4
 
-Corner Detector is implemented at this repo: 
+Corner Detector is implemented at this repo: https://github.com/LandonSwartz/HarrisCornerDetector
 
