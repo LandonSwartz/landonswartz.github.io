@@ -74,9 +74,9 @@ $$ \lambda_{min} \approx \frac{\lambda_{1}\lambda_{2}}{(\lambda_{1} + \lambda_{2
 
 To put it into values that we can understand:
 
-$$ R = det(M) - k * tr(M)^2$$
+$$ R = det(M) - k * tr(M)^2 $$
 
-where the R is the corner response in a patch of pixels. The $det(M)$ is the determinant of the structure tensor and &tr(M)$ is the trace of the structure tensor. The $k$ value is empiraclly determined in the original implementation to be between $[0.04, 0.06]$.
+where the R is the corner response in a patch of pixels. The $det(M)$ is the determinant of the structure tensor and $tr(M)$ is the trace of the structure tensor. The $k$ value is empiraclly determined in the original implementation to be between $[0.04, 0.06]$.
 
 Why do we care about the eigenvalues then? Well we can see from the image below what we mean visually about changing all directions. 
 ![harris_region](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/5b19fbd9-4938-4e23-aeab-827963cc7a23)
