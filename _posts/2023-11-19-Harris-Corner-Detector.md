@@ -145,7 +145,8 @@ In the next blog post, we will implement some simple feature descriptors to see 
 
 ### References and Code
 Harris, Christopher G. and M. J. Stephens. “A Combined Corner and Edge Detector.” Alvey Vision Conference (1988).
-ChatGPT-4
+
+ChatGPT-4 for automation of code construction
 
 Corner Detector is implemented at this [repo](https://github.com/LandonSwartz/HarrisCornerDetector)
 
