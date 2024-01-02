@@ -8,7 +8,7 @@ tags:
   - Harris Corner Detector
 ---
 
-# Implementing the Harris Corner Detector
+<!-- # Implementing the Harris Corner Detector -->
 
 ## The Harris Corner Detector
 
