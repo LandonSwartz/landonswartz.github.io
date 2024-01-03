@@ -12,7 +12,7 @@ title_separator          : "-"
 name                     : &name "Landon Swartz"
 description              : &description "PhD Student studying Computer Vision"
 url                      : https://landonswartz.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-baseurl                  : "/about" # the subpath of your site, e.g. "/blog"
+baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "landonswartz/landonswartz.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
@@ -81,7 +81,7 @@ analytics:
 # Site Author
 author:
   name             : "Landon Swartz"
-  avatar           : "profile_LS-Cropped.png"
+  avatar           : "profile_LS-Cropped.jpg"
   bio              : "Computer Science Ph.D at University of Missouri"
   location         : "Columbia, Missouri"
   employer         :
