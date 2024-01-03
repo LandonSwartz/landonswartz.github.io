@@ -1,6 +1,6 @@
 ---
 title: "Optimizing the Harris Corner Detector"
-date: 2024-1-1
+date: 2024-01-01
 permalink: /posts/2024/1/OptHarrisCorner/
 tags:
   - ComputerVision
@@ -62,69 +62,121 @@ There is a lot of big no-no's for python implementations in this method: for loo
 For instance, instead of iterating over every point, we can use a convolution to achieve the same method of iteration without the overhead. 
 
 ```python
+from scipy.ndimage import convolve
+
 def optimized_detect_corners(self):
-        """
-        Optimized method to detect corners using vectorized operations.
-        """
-        Ix2 = self.Ix ** 2
-        Iy2 = self.Iy ** 2
-        IxIy = self.Ix * self.Iy
+    """
+    Optimized method to detect corners using vectorized operations.
+    """
+    Ix2 = self.Ix ** 2
+    Iy2 = self.Iy ** 2
+    IxIy = self.Ix * self.Iy
 
-        # Define a window for convolution
-        window = np.ones((self.window_size, self.window_size))
+    # Define a window for convolution
+    window = np.ones((self.window_size, self.window_size))
 
-        # Use convolution to replace the nested loops for summing in a window
-        Sx2 = convolve(Ix2, window, mode='constant', cval=0)
-        Sy2 = convolve(Iy2, window, mode='constant', cval=0)
-        Sxy = convolve(IxIy, window, mode='constant', cval=0)
+    # Use convolution to replace the nested loops for summing in a window
+    Sx2 = convolve(Ix2, window, mode='constant', cval=0)
+    Sy2 = convolve(Iy2, window, mode='constant', cval=0)
+    Sxy = convolve(IxIy, window, mode='constant', cval=0)
 
-        # Calculate the determinant and trace of M for each pixel
-        detM = (Sx2 * Sy2) - (Sxy ** 2)
-        traceM = Sx2 + Sy2
+    # Calculate the determinant and trace of M for each pixel
+    detM = (Sx2 * Sy2) - (Sxy ** 2)
+    traceM = Sx2 + Sy2
 
-        # Calculate R for all pixels simultaneously
-        self.R = detM - self.k * (traceM ** 2)
+    # Calculate R for all pixels simultaneously
+    self.R = detM - self.k * (traceM ** 2)
 ```
 
 Now our corner detectors speeds through the harris response calculation. The local response calculations are done all at once using the convolutions. We can see another example in our Non-Maximal Suppression method:
 
 ```python
-    def apply_non_maximal_suppression(self, neighborhood_size=3):
-        height, width = self.R.shape
-        offset = neighborhood_size // 2
-        suppressed_R = np.zeros((height, width), dtype=np.float64)
+def apply_non_maximal_suppression(self, neighborhood_size=3):
+    height, width = self.R.shape
+    offset = neighborhood_size // 2
+    suppressed_R = np.zeros((height, width), dtype=np.float64)
 
-        for y in range(offset, height - offset):
-            for x in range(offset, width - offset):
-                local_max = np.max(
-                    self.R[y - offset : y + offset + 1, x - offset : x + offset + 1]
-                )
-                if self.R[y, x] == local_max:
-                    suppressed_R[y, x] = self.R[y, x]
+    for y in range(offset, height - offset):
+        for x in range(offset, width - offset):
+            local_max = np.max(
+                self.R[y - offset : y + offset + 1, x - offset : x + offset + 1]
+            )
+            if self.R[y, x] == local_max:
+                suppressed_R[y, x] = self.R[y, x]
 
-        self.R = suppressed_R
+    self.R = suppressed_R
 ```
 
 Lots of loops going element by element. But in our new method, we utilize the maximum filter from scipy.ndimage to achieve the same result across the entire array.
 
 ```python
-    def optimized_apply_non_maximal_suppression(self, neighborhood_size=3): 
-        """
-        Optimized method to apply non-maximal suppression using maximum filter.
-        """
-        # Apply maximum filter
-        max_filtered = maximum_filter(self.R, size=neighborhood_size)
+from scipy.ndimage import maximum_filter
 
-        # Create a mask where original R values match the maximum filter result
-        local_max_mask = (self.R == max_filtered)
+def optimized_apply_non_maximal_suppression(self, neighborhood_size=3): 
+    """
+    Optimized method to apply non-maximal suppression using maximum filter.
+    """
+    # Apply maximum filter
+    max_filtered = maximum_filter(self.R, size=neighborhood_size)
 
-        # Zero out non-local-maxima
-        self.R *= local_max_mask
+    # Create a mask where original R values match the maximum filter result
+    local_max_mask = (self.R == max_filtered)
+
+    # Zero out non-local-maxima
+    self.R *= local_max_mask
 ```
 
 The other benefit of vectorization is cleaner code. The downside to vectorization is that the cleaner code can be very hand-wavey in an implementation sense. In the original function, I felt very little need to document anything because the code was the explanation of the method. In the new method, I wanted to document every line because the inherent understanding of what was happening was not there in the code. Be very careful to observe what a built-in vectorization function does and document it.
 
 ### Parallelization
+
+Parallelization is simple in theory but complicated in execution. In theory, parallelization is dividing a collection of operations that are usually performed sequentially into operations performed concurrently with multiple threads/processes/etc. Parallelization is particularly effective at helping with large data processing, asynchronous I/O operations (such as file reading/writing), and, most importantly for our work, CPU-intensive computations.
+
+But, there are also several limitations to parallelization - especially for Python. The first and more obvious is computational overhead. If one wants to divide three CPU-intensive tasks into separate threads (as we will do in our case) then you will need a CPU that can not only support three threads running at full speed at the time but also be able to perform faster than one CPU core doing it sequentially. That is where our interactions with scale will come into play. 
+
+Another major pitfall for parallelization in python is the Global Interpreter Lock (GIL). The GIL is responsible for limiting CPU-bound tasks inherently in Python using a mutex (or a lock for computer operations) to protect access to Python objects. It prevents race conditions (or multiple threads trying to use the same resource at once) and keeps memory states consistent (a file is not changed at the same time by two threads). In practice, the GIL causes only one thread to execute at a time for Python code. The theory of the GIL is used all the time in C/C++ applications. The main difference is that the user controls all the settings in those languages. In Python, one has nearly no control over the GIL. Therefore, one can never achieve true parallelism (where multiple threads run at the same time) but only concurrency (multiple threads make progress over time). 
+
+For our little corner detector, we can implement parallelism (with some minor overhead additions) to improve the speed of our detections. Below is our harris corner response method where we can make just one small change for this boost in performance:
+
+```python
+from concurrent.futures import ThreadPoolExecutor
+
+def parallelized_detect_corners(self):
+    """
+    Parallelized method to detect corners using vectorized operations.
+    """
+    Ix2 = self.Ix ** 2
+    Iy2 = self.Iy ** 2
+    IxIy = self.Ix * self.Iy
+
+    # Define a window for convolution
+    window = np.ones((self.window_size, self.window_size))
+
+    # Function to perform convolution in parallel
+    def convolve_parallel(image_section):
+        return convolve(image_section, window, mode='constant', cval=0)
+
+    # Splitting the image into sections for parallel processing
+    sections = [Ix2, Iy2, IxIy]
+
+    # Using ThreadPoolExecutor to parallelize convolution
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        results = executor.map(convolve_parallel, sections)
+
+    # Unpacking the results
+    Sx2, Sy2, Sxy = results
+
+    # Calculate the determinant and trace of M for each pixel
+    detM = (Sx2 * Sy2) - (Sxy ** 2)
+    traceM = Sx2 + Sy2
+
+    # Calculate R for all pixels simultaneously
+    self.R = detM - self.k * (traceM ** 2)
+```
+
+The optimized operation for finding the second gradient of the image has to performed three separate times. With three threads, those operations can be performed concurrently to save another few seconds in execution. For smaller images, this is a negligible optimization (it may be a little slower because of the overhead of the threads being initialized). But for larger images ($5000x3000$ pixels) it is a game changer.
+
+As with vectorization, parallelism creates cleaner code at the cost of inherent understanding by looking at the code. My computer engineering background also compels me to note that parallelism is often a hardware consideration more than a software one. If you can deploy to hardware that can use parallelization, then look into using it. But also understand the limitations of that hardware. Our corner detector runs amazing on a desktop with a 12-core gaming CPU. If you throw the same detector onto an autonomous robot running a Raspberry Pi that has a lot of other overhead, it may not perform as well and need to be single threaded. That is enough theory now, let's see how fast we made our corner detector. 
 
 ### Experiments
 
