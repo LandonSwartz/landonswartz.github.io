@@ -1,9 +1,9 @@
 ---
 title: "OPEN leaf: an open-source cloud-based phenotyping system for tracking dynamic changes at leaf-specific resolution in Arabidopsis"
 collection: publications
-permalink: /publication/2009-10-01-paper-title-number-1
+permalink: /publication/2023-09-21-OPEN-leaf
 excerpt: 'Here we describe the design and implementation of OPEN leaf, an open-source phenotyping system with cloud connectivity and remote bilateral communication to facilitate data collection, sharing and processing. OPEN leaf, coupled with our SMART imaging processing pipeline was able to consistently document and quantify dynamic changes at the whole rosette level and leaf-specific resolution when plants experienced changes in nutrient availability.'
-date: 2023-9-21
+date: 2023-09-21
 venue: 'The Plant Journal'
 paperurl: '[http://academicpages.github.io/files/paper1.pdf](https://onlinelibrary.wiley.com/doi/10.1111/tpj.16449?af=R)'
 citation: 'Swartz, L.G., Liu, S., Dahlquist, D., Kramer, S.T., Walter, E.S., McInturf, S.A., Bucksch, A. and Mendoza-Cózatl, D.G. (2023), OPEN leaf: an open-source cloud-based phenotyping system for tracking dynamic changes at leaf-specific resolution in Arabidopsis. Plant J. https://doi.org/10.1111/tpj.16449'
