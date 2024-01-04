@@ -88,32 +88,32 @@ To put it into values that we can understand:
 
 $$ R = det(M) - k * tr(M)^2 $$
 
-where the R is the corner response in a patch of pixels. The $det(M)$ is the determinant of the structure tensor and $tr(M)$ is the trace of the structure tensor. The $k$ value is empirically determined in the original implementation to be between $[0.04, 0.06]$. But in the original paper, this empirically determined value is based on a balance of precision and recall. A higher $k$ value will produce precise corners, where false corner are filtered out better but also some true corners. A lower $k$ will raise the recall that produces more corners overall, including false corners. 
+where the R is the corner response in a patch of pixels. The $det(M)$ is the determinant of the structure tensor and $tr(M)$ is the trace of the structure tensor. The $k$ value is empirically determined in the original implementation to be between $[0.04, 0.06]$. But in the original paper, this empirically determined value is based on a balance of precision and recall. A higher $k$ value will produce precise corners, where false corner are filtered out better but also some true corners. A lower $k$ will raise the recall that produces more corners overall, including false corners.
 
 Why do we care about the eigenvalues then? Well we can see from the image below what we mean visually about changing all directions.
 
 ![harris_region](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/5b19fbd9-4938-4e23-aeab-827963cc7a23)
 
 ```python
-    def detect_corners(self):
-        Ix2 = self.Ix ** 2
-        Iy2 = self.Iy ** 2
-        IxIy = self.Ix * self.Iy
+def detect_corners(self):
+    Ix2 = self.Ix ** 2
+    Iy2 = self.Iy ** 2
+    IxIy = self.Ix * self.Iy
 
-        offset = self.window_size // 2
-        height, width = self.gray_image.shape
-        self.R = np.zeros((height, width), dtype=np.float64)
+    offset = self.window_size // 2
+    height, width = self.gray_image.shape
+    self.R = np.zeros((height, width), dtype=np.float64)
 
-        for y in range(offset, height - offset):
-            for x in range(offset, width - offset):
-                Sx2 = np.sum(Ix2[y - offset:y + offset + 1, x - offset:x + offset + 1])
-                Sy2 = np.sum(Iy2[y - offset:y + offset + 1, x - offset:x + offset + 1])
-                Sxy = np.sum(IxIy[y - offset:y + offset + 1, x - offset:x + offset + 1])
+    for y in range(offset, height - offset):
+        for x in range(offset, width - offset):
+            Sx2 = np.sum(Ix2[y - offset:y + offset + 1, x - offset:x + offset + 1])
+            Sy2 = np.sum(Iy2[y - offset:y + offset + 1, x - offset:x + offset + 1])
+            Sxy = np.sum(IxIy[y - offset:y + offset + 1, x - offset:x + offset + 1])
 
-                detM = (Sx2 * Sy2) - (Sxy ** 2)
-                traceM = Sx2 + Sy2
+            detM = (Sx2 * Sy2) - (Sxy ** 2)
+            traceM = Sx2 + Sy2
 
-                self.R[y, x] = detM - self.k * (traceM ** 2)
+            self.R[y, x] = detM - self.k * (traceM ** 2)
 ```
 
 ### Non-Maximal Suppression
@@ -123,19 +123,19 @@ One of the last things to consider for our little corner detector is Non-Maximal
 The basic process of NMS is to take a sliding window across the corner responses to find the max corner response in a local patch. This can be done quite easily with below:
 
 ```python
-    def apply_non_maximal_suppression(self, neighborhood_size=3):
-        height, width = self.R.shape
-        offset = neighborhood_size // 2
-        suppressed_R = np.zeros((height, width), dtype=np.float64)
-        
-        for y in range(offset, height - offset):
-            for x in range(offset, width - offset):
-                local_max = np.max(self.R[y - offset:y + offset + 1, x - offset:x + offset + 1])
-                if self.R[y, x] == local_max:
-                    suppressed_R[y, x] = self.R[y, x]
-                    
-                    
-        self.R = suppressed_R
+def apply_non_maximal_suppression(self, neighborhood_size=3):
+    height, width = self.R.shape
+    offset = neighborhood_size // 2
+    suppressed_R = np.zeros((height, width), dtype=np.float64)
+    
+    for y in range(offset, height - offset):
+        for x in range(offset, width - offset):
+            local_max = np.max(self.R[y - offset:y + offset + 1, x - offset:x + offset + 1])
+            if self.R[y, x] == local_max:
+                suppressed_R[y, x] = self.R[y, x]
+                
+                
+    self.R = suppressed_R
 ```
 
 As we'll see later, the neighborhood size here is an important parameter that is image and application specific. To see the results it can produced, here's the same Harris Response images from above after NMS.
