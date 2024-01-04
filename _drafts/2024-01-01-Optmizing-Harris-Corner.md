@@ -184,14 +184,18 @@ Now we start the fun part. The experiment is simple: take in an images of variou
 <!-- Show images here -->
 <!-- <img src="{{site.url}}/images/P2_optharris/small-image.jpg" /> -->
 
-![Small Image](https://github.com/LandonSwartz/landonswartz.github.io/images/P2_optharris/small-image.jpg "Small Image")
+![Small Image](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/small-image.jpg)
+<!-- ![Small-Medium Image](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/small-image.jpg) -->
+<!-- Need to add small medium image -->
+![Medium Image](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/medium-image.jpg)
+![Large Image](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/large-image.jpg)
 
-The number of keypoints detected are scaled in relation to the image size. The smaller the image, the less keypoints detected and vice versa. The three corner detection methods will be the original implementation that is un-optimized, the vectorized optimization, and the parallelized + vectorized optimization. The purely parallelized un-optimized method is excluded purely for my own sanity as the unoptimized method itself is too long for my short attention span. 
+The number of keypoints detected are scaled in relation to the image size. The smaller the image, the less keypoints detected and vice versa. The three corner detection methods will be the original implementation that is un-optimized, the vectorized optimization, and the parallelized + vectorized optimization. The purely parallelized un-optimized method is excluded purely for my own sanity as the unoptimized method itself is too long for my short attention span.
 
-Here are the results:
+Here are the results and small discussions for each size image:
 
 **Small Image (160x160)**
-| Method        | Number of Corners Detected | Time (ms)  |
+| Method        | Number of Corners Detected | Time (s)  |
 |---------------|:---------------------------:|:-----------:|
 | **Un-Optimized**  |                          |            |
 |               | 32                         | 0.59       |
@@ -212,9 +216,11 @@ Here are the results:
 |               | 256                        | 0.01       |
 |               | 512                        | 0.01       |
 
+For an image unrealistically small, the vectorized and parallel version performs basically the same compared to the un-optimized version by orders of magnitude. These optimizations will only scale, as we will see. But the important thing to note is that optimization still matters even at a small scale like this. Even if you process only images this small, you can do 1000 images in 10 seconds with optimizations versus 500 seconds un-optimized.
+
 **Small-Medium Image (640x470)**
 
-| Method        | Number of Corners Detected | Time (ms)  |
+| Method        | Number of Corners Detected | Time (s)  |
 |---------------|:---------------------------:|:-----------:|
 | **Un-Optimized**  |                          |            |
 |               | 64                         | 5.06       |
@@ -235,9 +241,11 @@ Here are the results:
 |               | 512                        | 0.04       |
 |               | 1024                       | 0.04       |
 
+This image, taken from the hpatches dataset, is small-medium because it is a realistic image with a small size. It was a late addition to the party because I felt the small image was really small and the medium image was really big in comparison. Here we see our optimizations scaling beautifully in comparison to the un-optimized version. Furthermore, the parallelized version starts to creep faster than the vectorized. But how would it do with an image that's closer to the quality that a modern IPhone could capture?
+
 **Medium Image (3840x2160)**
 
-| Method        | Number of Corners Detected | Time (ms)  |
+| Method        | Number of Corners Detected | Time (s)  |
 |---------------|:---------------------------:|:-----------:|
 | **Un-Optimized**  |                          |            |
 |               | 256                        | 130.78     |
@@ -258,8 +266,10 @@ Here are the results:
 |               | 2048                       | 1.12       |
 |               | 4096                       | 1.11       |
 
+Now I hope my point of scale is clear. The un-optimized version here takes over two minutes to process a single image! Just vectorizing the function causes the algorithm to speed up 130x. But the parallelization gives saves almost 0.5 seconds on top of that. While that small optimization seems like not a huge deal, image a dataset of 1000 images of this size capturing 2048 keypoints (a standard amount for quality keypoints). The vectorized would take 1680 seconds (28 minutes) while the parallelized would take 1120 seconds (18.67 minutes). Scaling an algorithm and its optimizations requires every ounce of performance to be squeezed out. 
+
 **Large Image (5143x3209)**
-| Method        | Number of Corners Detected | Time (ms)  |
+| Method        | Number of Corners Detected | Time (s)  |
 |---------------|:---------------------------:|:-----------:|
 | **Un-Optimized**  |                          |            |
 |               | 512                        | 258.14     |
@@ -280,8 +290,17 @@ Here are the results:
 |               | 4096                       | 1.86       |
 |               | 8192                       | 1.96       |
 
+This image is typical of something capture from a high-definition camera - like from a high-grade drone or film camera. Our un-optimized function would still be processing by the time you finished reading this section at this point. The parallelized version really starts to take over as the dominant method with being almost a second (~77x) faster. Now that we have optimized and saved a ton of time in execution, let's add a little bit of that time back for quality.
 
 ## Adaptive Non-Maximal Suppression
+
+Adaptive Non-Maximal Suppression (ANMS) is an evolution of Non-Maximal Suppression that adaptively suppresses keypoints throughout an image. NMS, as discussed in the previous blog post, allows for the maximum harris corner response in an area to remain. But NMS has two limitations. The first is the predefined neighborhood radius that is dataset dependent. The second is over-suppression that causes dense regions to suppress relaxant features. NMS does little to ensure a consistent distribution of keypoints throughout an image because of these limitations. Take the cityscape images from above, many of them contain many small windows and corners that are concentrated into a singular area of an image. This is fine for some tasks in computer vision but quickly becomes a bottleneck for others. One of the biggest limitations is that an image is essentially useless if the area of emphasis for key points is removed in other images (via occulisions or change in depth). Thus ANMS aims to correct that at the cost of some computational complexity.
+
+The process for ANMS is simple. Given a keypoint location, ANMS adapts a neighborhood dynamically based on the density of feature points. The stronger a feature point's harris corner response, the larger the suppressed neighborhood around it. An example implementation is included below:
+
+```python 
+
+```
 
 ### Theory
 
