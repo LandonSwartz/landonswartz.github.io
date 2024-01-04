@@ -179,6 +179,105 @@ The optimized operation for finding the second gradient of the image has to perf
 As with vectorization, parallelism creates cleaner code at the cost of inherent understanding by looking at the code. My computer engineering background also compels me to note that parallelism is often a hardware consideration more than a software one. If you can deploy to hardware that can use parallelization, then look into using it. But also understand the limitations of that hardware. Our corner detector runs amazing on a desktop with a 12-core gaming CPU. If you throw the same detector onto an autonomous robot running a Raspberry Pi that has a lot of other overhead, it may not perform as well and need to be single threaded. That is enough theory now, let's see how fast we made our corner detector. 
 
 ### Experiments
+Now we start the fun part. The experiment is simple: take in an images of various sizes and time how long it takes to perform corner detection for a determine number of keypoints. Our dataset consists of four images ranging from a small to large size shown below.
+
+<!-- Show images here -->
+<img src="{{site.url}}/images/P2_optharris/small-image.jpg" />
+
+The number of keypoints detected are scaled in relation to the image size. The smaller the image, the less keypoints detected and vice versa. The three corner detection methods will be the original implementation that is un-optimized, the vectorized optimization, and the parallelized + vectorized optimization. The purely parallelized un-optimized method is excluded purely for my own sanity as the unoptimized method itself is too long for my short attention span. 
+
+Here are the results:
+
+**Small Image (160x160)**
+| Method        | Number of Corners Detected | Time (ms)  |
+|---------------|:---------------------------:|:-----------:|
+| **Un-Optimized**  |                          |            |
+|               | 32                         | 0.59       |
+|               | 64                         | 0.44       |
+|               | 128                        | 0.44       |
+|               | 256                        | 0.43       |
+|               | 512                        | 0.43       |
+| **Vectorized**     |                          |            |
+|               | 32                         | 0.01       |
+|               | 64                         | 0.01       |
+|               | 128                        | 0.01       |
+|               | 256                        | 0.01       |
+|               | 512                        | 0.01       |
+| **Parallelized**   |                          |            |
+|               | 32                         | 0.01       |
+|               | 64                         | 0.01       |
+|               | 128                        | 0.01       |
+|               | 256                        | 0.01       |
+|               | 512                        | 0.01       |
+
+**Small-Medium Image (640x470)**
+
+| Method        | Number of Corners Detected | Time (ms)  |
+|---------------|:---------------------------:|:-----------:|
+| **Un-Optimized**  |                          |            |
+|               | 64                         | 5.06       |
+|               | 128                        | 4.90       |
+|               | 256                        | 5.12       |
+|               | 512                        | 4.77       |
+|               | 1024                       | 4.78       |
+| **Vectorized**     |                          |            |
+|               | 64                         | 0.08       |
+|               | 128                        | 0.06       |
+|               | 256                        | 0.06       |
+|               | 512                        | 0.06       |
+|               | 1024                       | 0.06       |
+| **Parallelized**   |                          |            |
+|               | 64                         | 0.06       |
+|               | 128                        | 0.04       |
+|               | 256                        | 0.03       |
+|               | 512                        | 0.04       |
+|               | 1024                       | 0.04       |
+
+**Medium Image (3840x2160)**
+
+| Method        | Number of Corners Detected | Time (ms)  |
+|---------------|:---------------------------:|:-----------:|
+| **Un-Optimized**  |                          |            |
+|               | 256                        | 130.78     |
+|               | 512                        | 132.04     |
+|               | 1024                       | 135.32     |
+|               | 2048                       | 137.15     |
+|               | 4096                       | 130.32     |
+| **Vectorized**     |                          |            |
+|               | 256                        | 1.66       |
+|               | 512                        | 1.55       |
+|               | 1024                       | 1.64       |
+|               | 2048                       | 1.68       |
+|               | 4096                       | 1.55       |
+| **Parallelized**   |                          |            |
+|               | 256                        | 1.11       |
+|               | 512                        | 1.11       |
+|               | 1024                       | 1.11       |
+|               | 2048                       | 1.12       |
+|               | 4096                       | 1.11       |
+
+**Large Image (5143x3209)**
+| Method        | Number of Corners Detected | Time (ms)  |
+|---------------|:---------------------------:|:-----------:|
+| **Un-Optimized**  |                          |            |
+|               | 512                        | 258.14     |
+|               | 1024                       | 269.77     |
+|               | 2048                       | 261.14     |
+|               | 4096                       | 259.72     |
+|               | 8192                       | 288.20     |
+| **Vectorized**     |                          |            |
+|               | 512                        | 2.64       |
+|               | 1024                       | 2.62       |
+|               | 2048                       | 2.60       |
+|               | 4096                       | 2.60       |
+|               | 8192                       | 2.58       |
+| **Parallelized**   |                          |            |
+|               | 512                        | 1.87       |
+|               | 1024                       | 1.87       |
+|               | 2048                       | 1.87       |
+|               | 4096                       | 1.86       |
+|               | 8192                       | 1.96       |
+
 
 ## Adaptive Non-Maximal Suppression
 
