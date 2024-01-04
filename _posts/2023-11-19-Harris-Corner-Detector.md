@@ -16,6 +16,8 @@ The Harris Corner Detector is one of the oldest interest point detectors in the 
 
 ![dime_building](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/d4be9d33-a4d4-4006-910f-c13c4bdb30e6)
 
+
+
 ## Overview
 
 The algorithm is a simple:
