@@ -292,18 +292,6 @@ Now I hope my point of scale is clear. The un-optimized version here takes over 
 
 This image is typical of something capture from a high-definition camera - like from a high-grade drone or film camera. Our un-optimized function would still be processing by the time you finished reading this section at this point. The parallelized version really starts to take over as the dominant method with being almost a second (~77x) faster. Now that we have optimized and saved a ton of time in execution, let's add a little bit of that time back for quality.
 
-## Adaptive Non-Maximal Suppression
-
-Adaptive Non-Maximal Suppression (ANMS) is an evolution of Non-Maximal Suppression that adaptively suppresses keypoints throughout an image. NMS, as discussed in the previous blog post, allows for the maximum harris corner response in an area to remain. But NMS has two limitations. The first is the predefined neighborhood radius that is dataset dependent. The second is over-suppression that causes dense regions to suppress relaxant features. NMS does little to ensure a consistent distribution of keypoints throughout an image because of these limitations. Take the cityscape images from above, many of them contain many small windows and corners that are concentrated into a singular area of an image. This is fine for some tasks in computer vision but quickly becomes a bottleneck for others. One of the biggest limitations is that an image is essentially useless if the area of emphasis for key points is removed in other images (via occulisions or change in depth). Thus ANMS aims to correct that at the cost of some computational complexity.
-
-The process for ANMS is simple. Given a keypoint location, ANMS adapts a neighborhood dynamically based on the density of feature points. The stronger a feature point's harris corner response, the larger the suppressed neighborhood around it. An example implementation is included below:
-
-```python 
-
-```
-
-### Theory
-
-### Experiments
-
 ## Conclusions
+
+Now that we can actually run our experiments without my computer having a heart attack with generating more than 256 keypoints, next blog post we will play with a simple feature descriptor (a patch of pixels) and learn about evaluating reprojection and homographies. Thanks for reading!
