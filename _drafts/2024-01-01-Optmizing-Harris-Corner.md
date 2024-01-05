@@ -294,4 +294,4 @@ This image is typical of something capture from a high-definition camera - like 
 
 ## Conclusions
 
-Now that we can actually run our experiments without my computer having a heart attack with generating more than 256 keypoints, next blog post we will play with a simple feature descriptor (a patch of pixels) and learn about evaluating reprojection and homographies. Thanks for reading!
+Now that we can actually run our experiments without my computer having a heart attack with generating more than 256 keypoints, next blog post we will play with a simple feature descriptor (a patch of pixels) and learn about evaluating reprojection and homographies. Thanks for reading!e
