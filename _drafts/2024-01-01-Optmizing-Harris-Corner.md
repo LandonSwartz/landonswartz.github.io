@@ -179,6 +179,7 @@ The optimized operation for finding the second gradient of the image has to perf
 As with vectorization, parallelism creates cleaner code at the cost of inherent understanding by looking at the code. My computer engineering background also compels me to note that parallelism is often a hardware consideration more than a software one. If you can deploy to hardware that can use parallelization, then look into using it. But also understand the limitations of that hardware. Our corner detector runs amazing on a desktop with a 12-core gaming CPU. If you throw the same detector onto an autonomous robot running a Raspberry Pi that has a lot of other overhead, it may not perform as well and need to be single threaded. That is enough theory now, let's see how fast we made our corner detector. 
 
 ### Experiments
+
 Now we start the fun part. The experiment is simple: take in an images of various sizes and time how long it takes to perform corner detection for a determine number of keypoints. Our dataset consists of four images ranging from a small to large size shown below.
 
 The number of keypoints detected are scaled in relation to the image size. The smaller the image, the less keypoints detected and vice versa. The three corner detection methods will be the original implementation that is un-optimized, the vectorized optimization, and the parallelized + vectorized optimization. The purely parallelized un-optimized method is excluded purely for my own sanity as the unoptimized method itself is too long for my short attention span.
@@ -285,4 +286,4 @@ This image is typical of something capture from a high-definition camera - like 
 
 ## Conclusions
 
-Now that we can actually run our experiments without my computer having a heart attack with generating more than 256 keypoints, next blog post we will play with a simple feature descriptor (a patch of pixels) and learn about evaluating reprojection and homographies. Thanks for reading!
+Now that we can actually run our experiments without my computer having a heart attack with generating more than 256 keypoints, next blog post we will play with a simple feature descriptor (a patch of pixels) and learn about evaluating reprojection and homographies. There are a few more improvements we could make now that we have optimizations (multi-scale, thresholding the response matrix, etc), but we can save those for another blog post. Thanks for reading!
