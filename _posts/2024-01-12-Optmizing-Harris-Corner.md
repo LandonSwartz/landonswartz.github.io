@@ -186,13 +186,13 @@ Now we start the fun part. The experiment is simple: take in an images of variou
 
 The number of keypoints detected are scaled in relation to the image size. The smaller the image, the less keypoints detected and vice versa. The three corner detection methods will be the original implementation that is un-optimized, the vectorized optimization, and the parallelized + vectorized optimization. The purely parallelized un-optimized method is excluded purely for my own sanity as the unoptimized method itself is too long for my short attention span.
 
-![](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/small-image.jpg)
+![](/images/P2_optharris/small-image.jpg)
 
-![](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/small_med.jpg)
+![](images/P2_optharris/small_med.jpg)
 
-![](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/medium-image.jpg)
+![](images/P2_optharris/medium-image.jpg)
 
-![](https://github.com/LandonSwartz/landonswartz.github.io/blob/master/images/P2_optharris/large-image.jpg)
+![](/images/P2_optharris/large-image.jpg)
 
 Here are the results and small discussions for each size image:
 
