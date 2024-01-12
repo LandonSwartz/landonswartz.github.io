@@ -188,9 +188,9 @@ The number of keypoints detected are scaled in relation to the image size. The s
 
 ![](/images/P2_optharris/small-image.jpg)
 
-![](images/P2_optharris/small_med.jpg)
+![](/images/P2_optharris/small_med.jpg)
 
-![](images/P2_optharris/medium-image.jpg)
+![](/images/P2_optharris/medium-image.jpg)
 
 ![](/images/P2_optharris/large-image.jpg)
 
