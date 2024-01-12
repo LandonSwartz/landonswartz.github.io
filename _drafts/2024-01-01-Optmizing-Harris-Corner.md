@@ -1,6 +1,6 @@
 ---
 title: "Optimizing the Harris Corner Detector"
-date: 2024-01-01
+date: 2024-01-12
 permalink: /posts/2024/1/OptHarrisCorner/
 tags:
   - ComputerVision
