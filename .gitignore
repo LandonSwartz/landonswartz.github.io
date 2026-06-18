@@ -1,14 +1,5 @@
-_site/
-
-# Ruby files
-# Ignore Ruby gem files
-*.gem
-
-# Ignore the bundled gems directory
-/vendor/bundle
-
-# Ignore specific Bundler config
-/.bundle
-
-# Optionally ignore Gemfile.lock
-Gemfile.lock
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
