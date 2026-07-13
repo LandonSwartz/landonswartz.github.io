@@ -122,6 +122,7 @@ Every pixel is then process in this same way sequentially until the last pixel i
 The Macintosh was released in the mythical year of 1984 with a 512x342 pixel screen. The Mac proved the way for modern computer as we know them. It was all-in-one. A mouse and keyboard allow users to interact with both command-line and a new graphical interface. But it only contains a CRT monochrome display. And an engineer at Apple Computer named Bill Atkinson had to make everything look good on this display, no matter what it was. 
 
 Atkinson built of the Floyd-Steinberg dithering algorithm with a few modification. The first was that the error would be spread over a larger area than just immediate neighbors, like in FS. The second was that only 3/4 of the error would be diffused. The resulting diffusion matrix is below: 
+
 $$
 \begin{bmatrix}
  & * & \frac{1}{8} & \frac{1}{8} \\
