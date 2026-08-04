@@ -77,6 +77,7 @@ kramdown:
   math_engine: mathjax
 permalink: /:categories/:title/
 paginate: 5
+paginate_path: /page:num/
 
 include:
   - _pages

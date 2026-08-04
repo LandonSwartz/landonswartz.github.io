@@ -1,11 +1,28 @@
 ---
 layout: single
+classes: wide
 title:  "Dithering Algorithms"
 date:   2026-07-13
 categories: dithering graphics image-processing
 permalink: /posts/
+header:
+  image: /assets/images/dithering_post/bill_atkinson.jpg
+  image_description: "A portrait of Bill Atkinson"
+  caption: "Photo: Michel Baret/Getty Images" 
+
+gallery:
+  - image_path: /assets/images/dithering_post/Michelangelos_David_gamma22.png
+    alt: "Michaelango's David"
+    title: "Michaelango's David"
+  - image_path: /assets/images/dithering_post/Apple_Macintosh_Desktop.png
+    alt: "Apple Macintosh System 1"
+    title: "Apple Macintosh System 1"
+  - image_path: /assets/images/dithering_post/simcity.png
+    alt: "Sim City"
+    title: "Sim City"
 ---
 
+<!---
 Outline: 
 - Intro about missing the beauty of simple algorithms
 - Overview of what dithering is
@@ -19,6 +36,7 @@ Outline:
 	- JJN
 	- Stucki
 - Conclusion
+--->
 
 
 There's something that pulls me in when I learn a simple algorithm. To me, something elegant isn't the biggest or longest solution. It is often the simple solution that solves one problem.  Daedalus was trapped in a labyrinth with his son Icarus, so he had to get creative and make wings for them to escape. Lewis and Clark traversed the west to see if there was a water connection between east and west coasts. Seeing something created for a reason creates such an intrigue in me as an engineer. 
@@ -37,11 +55,15 @@ Dithering a signal allows for one to take a function that maps inputs to outputs
 
 Dithering algorithms became important in early computer graphics because of limitations of the time. Computer screens could only have so many colors on screen at a time (like black and white or 8 bits of color). Therefore, it became very important to not just be able to display images with the limited color sets but also keep their depth and color. In a few years, this same problem came up on the early internet where images needed to conform to a limited color palette and keep their depth. 
 
-(Image of binary colors of famous early computer graphics)
+<!-- ![Image of Michaelango's David](/assets/images/dithering_post/Michelangelos_David_gamma22.png)
+
+![Macintosh System 1 Desktop Image](/assets/images/dithering_post/Apple_Macintosh_Desktop.png) -->
+{% include gallery %}
+
 
 One famous example of this is the GIF standard that limits color palettes to 256 colors. Without dithering, quaternization of reducing an image to 256 colors produces an main artifact of the process: color banding. It's ugly, noticeable, and very easy to fix with dithering. 
 
-(image of color banding on an image, maybe wikipedia page)
+![Color Banding Example](/assets/images/dithering_post/color_band_comp_fig.png)
 
 # A sampling of algorithms 
 
@@ -98,24 +120,26 @@ The algorithm starting at pixel 0, observe the old pixel. To find what the pixel
 
 After finding the closest related color, the actual quantization error is found. It is simply the Euclidean distance from the old color to the new color. But here comes the diffusion part of the error-diffusion. That error value is then divided into slices of a pie and added to it's neighboring pixels. An example is provided below. 
 
-(Gif of error diffusion)
+![Gif of error diffusion](/assets\images\dithering_post\error_diffusion.gif)
 
 There are two ramification of this process. The first is that the new output pixel will affect what the next output pixel will be. The second is that the diffusion matrix is wildly important in shaping the output. For the FS dithering algorithm the diffusion matrix is (with * denote the current pixel): 
 
-{% raw %}
 $$
 \begin{bmatrix}
  & * & \frac{7}{16} \\
 \frac{3}{16} & \frac{5}{16} & \frac{1}{16}
 \end{bmatrix}
 $$
-{% endraw %}
 
 But other algorithms will play with this diffusion matrix to fine-tune their approaches. 
 
 Every pixel is then process in this same way sequentially until the last pixel is reached. Now you've taken an image of 256 colors and made it an image of 2 colors in the matter of milliseconds. 
 
-(original and final image)
+![Floyd-Steinberg Dithering Comparison](/assets/images/dithering_post/fs_dithering_comp.png)
+
+To see the dithering effect alittle more clearly, here is the image zoomed in to the center. 
+
+![Floyd-Steinberg Dithering Zoomed in](/assets\images\dithering_post\fs_dithering_comp_zoom.png)
 
 ## Atkinson
 
@@ -133,7 +157,13 @@ $$
 
 The result of these two modification was an objectively better looking dithering to the human eye. Since only 75% of the quantization error is diffused in the process in a larger area, the effect of the dithering is more localized. Another side effect being that areas of mostly black and white are preserved (so that effects over detail are emphasized[^4]).
 
-(Show results and compare the error differences)
+![Atkinson Dithering Results](/assets\images\dithering_post\atkinson_dithering_comp.png)
+
+![Atkinson Dithering Zoomed In](/assets\images\dithering_post\atkinson_dithering_comp_zoom.png.png)
+
+The difference of the error diffusion step really emphasizes Atkinson's changes. 
+
+![Difference in Error](/assets\images\dithering_post\error-diffusion-comp.png)
 
 The implementation barely changes as well except for accounting for bounds two rows and columns away.
 
@@ -171,7 +201,9 @@ def Atkinson_Dithering(src_image: np.array) -> np.array:
 
 Other variations exist with dithering for different purposes. Minimize Average Error Dithering from Jarvis, Judice, and Ninke (dibs on that 70's prog band name) distributes the quaternization error even further than the Atkinson algorithm to preserve more details but at the cost of more computation time. Stucki dithering improved on JJN dithering's computational time by making the kernel all divisible by 2. And so many more! Explore with creating your own kernels[^6] and become apart of the Ditherpunk movement[^5]. 
 
-(Collage image of other methods)
+![Zoomed in dithering](/assets\images\dithering_post\other_dithering_imgs.png)
+
+![Other dithering methods](/assets\images\dithering_post\jjn_stucki_dithering.png)
 
 # Simple Algorithms are best
 
@@ -180,9 +212,14 @@ I hope you came away with an appreciation for the simple. Dithering is just one 
 # Sources
 
 [^1]:[Bill Atkinson, Who Made Computers Easier to Use, Is Dead at 74](https://www.nytimes.com/2025/06/07/technology/bill-atkinson-dead.html)
+
 [^2]:[Merriam Website definition of dither](https://www.merriam-webster.com/dictionary/dither)
+
 [^3]:[Return of the Obra Dinn](https://forums.tigsource.com/index.php?topic=40832.msg1363742#msg1363742) graphics deep-dive
+
 [^4]:[Stop Drawing Objects -- Draw the Effect We See](https://youtu.be/4cd5kV8hOtY?si=mIpZTWdfQBj3Pwlc)
+
 [^5]:[Ditherpunk — The article I wish I had about monochrome image dithering](https://surma.dev/things/ditherpunk/)
+
 [^6]:[Bad Dithering Algorithms](https://burkhardt.dev/2024/bad-dithering-algorithms/)
 
