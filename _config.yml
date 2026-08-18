@@ -82,11 +82,20 @@ paginate_path: /page:num/
 include:
   - _pages
 
+# plugins:
+#   - jekyll-sitemap
+#   - jekyll-feed
+#   # - jekyll-remote-theme
+#   - jekyll-include-cache
+  
 plugins:
+  - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-gist
   - jekyll-feed
-  # - jekyll-remote-theme
+  - jemoji
   - jekyll-include-cache
+
 
 defaults:
   - scope:
@@ -99,3 +108,10 @@ defaults:
       comments: true
       share: true
       related: true
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true

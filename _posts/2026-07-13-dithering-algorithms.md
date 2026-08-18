@@ -1,10 +1,11 @@
 ---
 layout: single
 classes: wide
-title:  "Dithering Algorithms"
+title:  "Bill Atkinson and Dithering Algorithms"
 date:   2026-07-13
-categories: dithering graphics image-processing
-permalink: /posts/
+tags: dithering graphics image-processing
+categories: blog
+excerpt: An exploration of dithering with error diffusion because of Bill Atkinson
 header:
   image: /assets/images/dithering_post/bill_atkinson.jpg
   image_description: "A portrait of Bill Atkinson"
