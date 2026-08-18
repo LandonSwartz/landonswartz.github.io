@@ -1,22 +1,21 @@
 ---
+layout: single
 title: "Implementing the Harris Corner Detector"
 date: 2023-11-19
-permalink: /posts/2023/11/HarrisCorner/
-tags:
-  - ComputerVision
-  - Corners
-  - Harris Corner Detector
+categories: blog
+tags: computer-vision corners harris-corner-detector
+excerpt: Implementing to understand and visualize the Harris Corner Detector
 ---
 
 <!-- # Implementing the Harris Corner Detector -->
+
+NOTE: This post was written when I was younger, dumber, and more focused on showing what I was learning. Forgive mistakes and hastily written code.
 
 ## The Harris Corner Detector
 
 The Harris Corner Detector is one of the oldest interest point detectors in the toolkit of computer vision. First introduced in the 1988 paper "A Combined Corner and Edge Detector" by Chris Harris and Mike Stephens as an improvement on the Moravec corner algorithm, the algorithm stands as one of the easiest interest point detectors to implement for the aspiring computer vision scientist. In this blog post, we will implement the algorithm piece by piece to see how it works with parameters.
 
-![dime_building](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/d4be9d33-a4d4-4006-910f-c13c4bdb30e6)
-
-
+![dime_building](/assets\images\harris_corner_detector\harris_corner_detector_1.png)
 
 ## Overview
 
@@ -42,8 +41,9 @@ def load_image(self, image_path):
 
 ### Find the gradients
 
-Computing the gradients of an image requires a special kind of process that some may be familar with if you have any experience with neural networks and convolutions where you convolve two 3x3 kernels with an image to calculate the approximations of the deriviates in both the x and y direction. The best way to understand it is to see the results in action. 
-![image_gradients](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/3118c840-a654-451a-b550-d22127b83c5f)
+Computing the gradients of an image requires a special kind of process that some may be familar with if you have any experience with neural networks and convolutions where you convolve two 3x3 kernels with an image to calculate the approximations of the deriviates in both the x and y direction. The best way to understand it is to see the results in action.
+
+![image_gradients](/assets\images\harris_corner_detector\harris_corner_detector_2.png)
 
 As you can see from the image above, Ix (the gradient in the x / horizontal direction) finds the edges in the horizontal direction of the image. Iy finds the edges in the vertical direction of the image. That is where the _"Combined Corner and Edge Detection"_ part of the method comes into play. Traditionally, we apply a gaussian filter before finding the gradients to remove any noise from the image (especially back in the early 1990's and before Iphones when everyone had a 4K camera in their pocket).
 
@@ -72,15 +72,15 @@ where Ix and Iy are the previous found image gradients and W is the neighborhood
 
 ### Calculating the Harris Response
 
-Mathematically, it is important to remember that a corner is a point whose local neighborhood is characterized by large intensity variation in all directions. Which is a fancy way to say, a corner is a point in a patch of pixels that has the largest changes in x and y. If it was just a change in one direction, it would just be an edge. We can see this when we look at the Harris Response calculated across the entire image. 
+Mathematically, it is important to remember that a corner is a point whose local neighborhood is characterized by large intensity variation in all directions. Which is a fancy way to say, a corner is a point in a patch of pixels that has the largest changes in x and y. If it was just a change in one direction, it would just be an edge. We can see this when we look at the Harris Response calculated across the entire image.
 
-![corner_response](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/5e87292f-7c27-459d-bc14-b8f25cf9fb82)
+![corner_response](/assets\images\harris_corner_detector\harris_corner_detector_3.png)
 
 If we want to see even better, we can zoom in on a section of the image.
 
-![zoomed_response](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/0c3ff289-ae1b-4b79-b11f-85c2743c1d46)
+![zoomed_response](/assets\images\harris_corner_detector\harris_corner_detector_4.png))
 
-Now that looks pretty good! We can see edges being defined and the corners being defined clearly. 
+Now that looks pretty good! We can see edges being defined and the corners being defined clearly.
 
 To understand what is happening on a math level, we are observing the eigenvalues of the structure tensor to find the corners as seen below:
 
@@ -94,7 +94,7 @@ where the R is the corner response in a patch of pixels. The $det(M)$ is the det
 
 Why do we care about the eigenvalues then? Well we can see from the image below what we mean visually about changing all directions.
 
-![harris_region](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/5b19fbd9-4938-4e23-aeab-827963cc7a23)
+![harris_region](/assets\images\harris_corner_detector\harris_corner_detector_5.jpg)
 
 ```python
 def detect_corners(self):
@@ -142,23 +142,23 @@ def apply_non_maximal_suppression(self, neighborhood_size=3):
 
 As we'll see later, the neighborhood size here is an important parameter that is image and application specific. To see the results it can produced, here's the same Harris Response images from above after NMS.
 
-![nms_response](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/db50e603-8ad8-4b29-8b91-ea5b37d33749)
+![nms_response](/assets\images\harris_corner_detector\harris_corner_detector_6.png)
 
-![nms_zoom_response](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/e9bb6231-0730-4840-ba6e-259b70d2a60c)
+![nms_zoom_response](/assets\images\harris_corner_detector\harris_corner_detector_7.png)
 
-As we see below, the number of corners is greatly reduced and cleaner. 
+As we see below, the number of corners is greatly reduced and cleaner.
 
-![nms_corners](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/0b2b5f6f-77cd-4aa2-9ab5-dc7ee20aa8f8)
+![nms_corners](/assets\images\harris_corner_detector\harris_corner_detector_8.png)
 
 ### Conclusion
 
 The Harris Corner Detector works great for a lot of situations in computer vision. If you want to a guess at what situations/images it would be best in, think deeply about the name. It's important to recognize that corners are not universal especially in cases of biological data or organic architecture. Occlusions and different lightnings can affect the harris corner response as well. As anyone who's worked in computer vision will learn, your data is never as pretty as you want. Speed is something to consider to in implementation. Do you need to capture EVERY corner or just enough to do your task as hand on a raspberry pi? Quality and speed are often trade-off you have to consider and tune your algorithm to. 
 
-![castle_1](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/cfc12850-38f6-4976-91b7-2e1871d225d0)
+![castle_1](/assets\images\harris_corner_detector\harris_corner_detector_9.png)
 
-![resort_3](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/5aaf535e-0163-4651-b30b-6dbee2bc2017)
+![resort_3](/assets\images\harris_corner_detector\harris_corner_detector_10.png)
 
-![wall_1](https://github.com/LandonSwartz/landonswartz.github.io/assets/50836209/2dc55115-d8ed-4de0-8840-10f4403814ec)
+![wall_1](/assets\images\harris_corner_detector\harris_corner_detector_11.png)
 
 In the next blog post, we will implement some simple feature descriptors to see how our little corner detector performs in producing homographies.
 
