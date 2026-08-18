@@ -5,4 +5,11 @@ layout: single
 author_profile: true
 ---
 
-How to contact me. 
+You can reach out to me via email at
+
+[lgaswartz@gmail.com](mailto:lgaswartz@gmail.com)
+
+### Socials
+
+- [Github](https://github.com/LandonSwartz)
+- [LinkedIn](https://www.linkedin.com/in/landon-swartz417)
