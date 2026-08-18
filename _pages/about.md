@@ -5,7 +5,7 @@ layout: single
 author_profile: true
 ---
 
-Hello! I'm an experienced engineer that's worked in hardware and software roles for embedded systems, product development, and flight systems. I have interests in computer vision and graphics, algorithms, and circuits.
+Hello! I'm an experienced engineer that has worked in hardware and software for embedded microcontrollers, product development, and flight systems. I have interests in computer vision and graphics, algorithms, and circuits.
 
 ### Skills
 
@@ -25,4 +25,4 @@ Hello! I'm an experienced engineer that's worked in hardware and software roles 
 - **Master of Engineering in Computer Science**, University of Missouri [Aug 2024] - research focus in computer vision and 3D reconstruction for organic organisms (plants) and city-wide aerial imagery
 - **Bachelor of Science in Computer Engineering**, University of Missouri [May 2022]
 
-See my [blog posts](/posts/) or [contact](contact.md) me for more information.
+See my [blog posts](/year-archive/) or [contact](contact.md) me for more information.
