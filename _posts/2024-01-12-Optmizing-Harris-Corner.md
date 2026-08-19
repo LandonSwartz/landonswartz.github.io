@@ -1,21 +1,21 @@
 ---
+layout: single
 title: "Optimizing the Harris Corner Detector"
 date: 2024-01-12
-permalink: /posts/2024/1/OptHarrisCorner/
-tags:
-  - ComputerVision
-  - Corners
-  - Harris Corner Detector
-  - Optimization
+categories: blog
+tags: computer-vision corners harris-corner-detector optimization
+excerpt: Optimizing our Harris Corner Detector
 ---
 
 <!-- # Optimizing the Harris Corner Detector -->
 
+NOTE: This post was written when I was younger, dumber, and more focused on showing what I was learning. Forgive mistakes and hastily written code.
+
 ## Brief Introduction
 
-![](/images/P2_optharris/optimization_xkcd.png)
+![XKCD meme](/assets/images/P2_optharris/optimization_xkcd.png)
 
-One of the reasons that I started this blog was to start doing project-based learning on computer vision concepts outside of my graduate classes. That was why I chose the Harris Corner Detector as one of my first posts - it was one of the first projects in my Computer Vision graduate class. But that lead me into one of the greatest problems of project-based learning outside of the classroom. After a class project, one moves on to new work with little regard for state of the project they just did. But, as I found with this project, that mentality doesn't always translate to the real world. 
+One of the reasons that I started this blog was to start doing project-based learning on computer vision concepts outside of my graduate classes. That was why I chose the Harris Corner Detector as one of my first posts - it was one of the first projects in my Computer Vision graduate class. But that lead me into one of the greatest problems of project-based learning outside of the classroom. After a class project, one moves on to new work with little regard for state of the project they just did. But, as I found with this project, that mentality doesn't always translate to the real world.
 
 The corner detector we implemented in the last posts was, at the time, not too far off from being a finished product. It was quite similar to my original implementation I submitted. But then I started working on implement feature descriptors and matching them. It was a long time, like a REALLY long time. That is what led to this blog post. This post is all about optimizing through vectorizing, parallelization, and generally smarter ways to implement things. It was a great learning experience for learning that a project is never truly finished but just reaches steps of maturity.
 
@@ -186,13 +186,13 @@ Now we start the fun part. The experiment is simple: take in an images of variou
 
 The number of keypoints detected are scaled in relation to the image size. The smaller the image, the less keypoints detected and vice versa. The three corner detection methods will be the original implementation that is un-optimized, the vectorized optimization, and the parallelized + vectorized optimization. The purely parallelized un-optimized method is excluded purely for my own sanity as the unoptimized method itself is too long for my short attention span.
 
-![](/images/P2_optharris/small-image.jpg)
+![test image 1](/assets//images/P2_optharris/small-image.jpg)
 
-![](/images/P2_optharris/small_med.jpg)
+![test image 2](/assets//images/P2_optharris/small_med.jpg)
 
-![](/images/P2_optharris/medium-image.jpg)
+![test image 3](/assets//images/P2_optharris/medium-image.jpg)
 
-![](/images/P2_optharris/large-image.jpg)
+![test image 4](/assets//images/P2_optharris/large-image.jpg)
 
 Here are the results and small discussions for each size image:
 
@@ -269,7 +269,7 @@ This image, taken from the hpatches dataset, is small-medium because it is a rea
 |               | 2048                       | 1.12       |
 |               | 4096                       | 1.11       |
 
-Now I hope my point of scale is clear. The un-optimized version here takes over two minutes to process a single image! Just vectorizing the function causes the algorithm to speed up 130x. But the parallelization gives saves almost 0.5 seconds on top of that. While that small optimization seems like not a huge deal, image a dataset of 1000 images of this size capturing 2048 keypoints (a standard amount for quality keypoints). The vectorized would take 1680 seconds (28 minutes) while the parallelized would take 1120 seconds (18.67 minutes). Scaling an algorithm and its optimizations requires every ounce of performance to be squeezed out. 
+Now I hope my point of scale is clear. The un-optimized version here takes over two minutes to process a single image! Just vectorizing the function causes the algorithm to speed up 130x. But the parallelization gives saves almost 0.5 seconds on top of that. While that small optimization seems like not a huge deal, image a dataset of 1000 images of this size capturing 2048 keypoints (a standard amount for quality keypoints). The vectorized would take 1680 seconds (28 minutes) while the parallelized would take 1120 seconds (18.67 minutes). Scaling an algorithm and its optimizations requires every ounce of performance to be squeezed out.
 
 **Large Image (5143x3209)**
 
