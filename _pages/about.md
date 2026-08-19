@@ -7,6 +7,8 @@ author_profile: true
 
 Hello! I'm an experienced engineer that has worked in hardware and software for embedded microcontrollers, product development, and flight systems. I have interests in computer vision and graphics, algorithms, and circuits.
 
+This blog is a way for me to explore interesting problems and tell others about them. I hope it inspires others to pursue their own interesting problems.
+
 ### Skills
 
 - **Langauges**: C/C++, Ada, Python, C# (begrudgingly)
