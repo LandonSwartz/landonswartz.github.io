@@ -14,13 +14,13 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: "Engineer Dreams"
+title: "Bits To Reality"
 description: >- # this means to ignore newlines until "baseurl:"
   A personal tech blog focusing on exploring and dissecting algorithms and 
   things interesting to the author.
 url: "https://landonswartz.github.io"
 # theme: minimal-mistakes-jekyll # locally
-minimal_mistakes_skin: "neon"  # options: air, aqua, contrast, dark, dirt, neon, mint, plum, sunrise
+minimal_mistakes_skin: "dirt"  # options: air, aqua, contrast, dark, dirt, neon, mint, plum, sunrise
 search: true
 github_username: LandonSwartz
 
