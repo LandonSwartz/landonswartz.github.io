@@ -9,6 +9,7 @@ excerpt: Optimizing our Harris Corner Detector
 
 <!-- # Optimizing the Harris Corner Detector -->
 
+{: .notice--warning}
 NOTE: This post was written when I was younger, dumber, and more focused on showing what I was learning. Forgive mistakes and hastily written code.
 
 ## Brief Introduction
